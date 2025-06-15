@@ -49,7 +49,8 @@ linters: linters_with_defaults(
   open_curly_linter = NULL,
   commented_code_linter = NULL,
   trailing_whitespace_linter = NULL,
-  infix_spaces_linter = NULL
+  infix_spaces_linter = NULL,
+  object_name_linter = NULL
   )
 ```
 
