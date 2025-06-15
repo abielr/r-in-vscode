@@ -21,7 +21,9 @@ devtools::install_github("nx10/httpgd") # For displaying plots
 
 # Configuration
 
-## `~/.Rprofile`  setup
+## `.Rprofile`  setup
+
+If you do not have an `.Rprofile` file, create it in the directory given by `Sys.getenv("HOME")`
 
 ```{r}
 # Necessary to get the R terminal to attach properly
