@@ -16,43 +16,11 @@ R's built-in terminal has limited features and doesn't handle multi-line stateme
 
 ```{r}
 install.packages("languageserver") # R language server
-devtools::install_github("nx10/httpgd") # For displaying plots
+install.packages("jcd") # For plots
+install.packages("httpgd") # Another option for displaying plots
 ```
 
 # Configuration
-
-## `.Rprofile`  setup
-
-If you do not have an `.Rprofile` file, create it in the directory given by `Sys.getenv("HOME")`
-
-```{r}
-# Necessary to get the R terminal to attach properly
-source(file.path(Sys.getenv(if (.Platform$OS.type == "windows") "USERPROFILE" else "HOME"), ".vscode-R", "init.R"))
-
-# May need to include if using arf - see https://github.com/eitsupi/arf/issues/158
-.First <- function() {
-  if (
-    Sys.getenv("TERM_PROGRAM") == "vscode" &&
-      exists(".First.sys", envir = .GlobalEnv)
-  ) {
-    .GlobalEnv$.First.sys()
-    if (exists(".First.sys", envir = .GlobalEnv, inherits = FALSE)) {
-      rm(".First.sys", envir = .GlobalEnv)
-    }
-  }
-}
-
-# Use httpgd for plots
-if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
-  if (requireNamespace("httpgd", quietly = TRUE)) {
-    options(vsc.plot = FALSE)
-    options(device = function(...) {
-      httpgd::hgd(silent = TRUE)
-      .vsc.browser(httpgd::hgd_url(history = FALSE), viewer = "Beside")
-    })
-  }
-}
-```
 
 ## Create `~/.lintr` file
 
@@ -101,16 +69,13 @@ At present when you use the pipe operator VSCode is not able to auto-indent afte
 
 In settings (`Ctrl+,`), do the following:
 
-1. Search for `Rterm` and enter the path to your `radian` or `arf` executable.
-1. Check `Always Use Active Terminal`
+1. Set `R: Console Path` to the location of your `radian` or `arf` binary.
 1. Check `Bracketed Paste`
-1. Check `Plot: Use Httpgd`
+1. Set `Plot: Plot Backend` to your desired R plotting backend like `jcd` or `httpgd`, or leave as `auto`
 
 ## Using the terminal
 
 If you run a line of code with `Ctrl+Enter` it will open a new `radian` or `arf` instance in your terminal. If this does not work press `Ctrl+Shift+P` and select `Create R terminal`. I prefer to have the terminal in a normal tab so I can move it around the screen, similar to the Jupyter Interactive Window. To do this, click and drag the `R Interactive` label in the top right of your console window into the text editor area.
-
-When using this method to create a terminal plots with `httpgd` will not work unless you have setup your `~/.Rprofile` file as described above.
 
 To speed up text rendering in the console, you may need to change the setting `Terminal: Integrated: Gpu Acceleration` to `off`. 
 
@@ -118,5 +83,8 @@ If text within the console is wrapping too much, you can set a wider width using
 
 ## Plotting
 
-* Make sure you `Plot: Use Httpgd` is checked in Settings.
-* `ggplot2` text may look too small by default. You can change the default via a command like `theme_set(theme(base_size=18))`
+`ggplot2` text may look too small by default. You can change the default via a command like `theme_set(theme(base_size=18))`
+
+## Code formatting
+
+Install the [Air](https://marketplace.visualstudio.com/items?itemName=Posit.air-vscode) code formatter for best performance
