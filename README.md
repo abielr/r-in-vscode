@@ -22,25 +22,22 @@ install.packages("httpgd") # Another option for displaying plots
 
 # Configuration
 
-## Create `~/.lintr` file
+## Configure R extension settings
 
-By default there seems to be too much linting going on, this disables some. For more options click [here](https://cran.r-project.org/web/packages/lintr/vignettes/lintr.html)
+In settings (`Ctrl+,`), do the following:
+
+1. Set `R: Console Path` to the location of your `radian` or `arf` binary.
+1. Check `Bracketed Paste`
+1. Set `Plot: Plot Backend` to your desired R plotting backend like `jcd` or `httpgd`, or leave as `auto`
+
+Also add the following to your VSCode `settings.json`:
 
 ```
-linters: linters_with_defaults(
-  line_length_linter = NULL,
-  open_curly_linter = NULL,
-  commented_code_linter = NULL,
-  trailing_whitespace_linter = NULL,
-  infix_spaces_linter = NULL,
-  object_name_linter = NULL,
-  commas_linter = NULL,
-  pipe_consistency_linter = NULL,
-  pipe_continuation_linter = NULL,
-  indentation_linter = NULL,
-  T_and_F_symbol_linter = NULL,
-  quotes_linter = NULL
-  )
+"[r]": {
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true
+}
 ```
 
 ## Create keyboard shortcuts
@@ -65,13 +62,26 @@ Add the following to your keyboard shortcuts JSON file to mimic RStudio's keyboa
 
 At present when you use the pipe operator VSCode is not able to auto-indent after the first line.
 
-## Configure R extension settings
+## Create `~/.lintr` file
 
-In settings (`Ctrl+,`), do the following:
+By default there seems to be too much linting going on, this disables some. For more options click [here](https://cran.r-project.org/web/packages/lintr/vignettes/lintr.html)
 
-1. Set `R: Console Path` to the location of your `radian` or `arf` binary.
-1. Check `Bracketed Paste`
-1. Set `Plot: Plot Backend` to your desired R plotting backend like `jcd` or `httpgd`, or leave as `auto`
+```
+linters: linters_with_defaults(
+  line_length_linter = NULL,
+  open_curly_linter = NULL,
+  commented_code_linter = NULL,
+  trailing_whitespace_linter = NULL,
+  infix_spaces_linter = NULL,
+  object_name_linter = NULL,
+  commas_linter = NULL,
+  pipe_consistency_linter = NULL,
+  pipe_continuation_linter = NULL,
+  indentation_linter = NULL,
+  T_and_F_symbol_linter = NULL,
+  quotes_linter = NULL
+  )
+```
 
 ## Using the terminal
 
@@ -83,7 +93,13 @@ If text within the console is wrapping too much, you can set a wider width using
 
 ## Plotting
 
-`ggplot2` text may look too small by default. You can change the default via a command like `theme_set(theme(base_size=18))`
+`ggplot2` text may look too small by default. You can change the default via a command like `theme_set(theme(base_size=18))`. You can make this the default every time VSCode starts by adding the following to your `~/.Rprofile`:
+
+```
+if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
+  ggplot2::theme_set(ggplot2:theme(base_size=18))
+}
+```
 
 ## Code formatting
 
